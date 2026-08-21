@@ -1,8 +1,11 @@
-﻿using System;
+using System;
+using System.Text;
 
 
-namespace XulambsFoods {    
-    public class Pizza {
+namespace XulambsFoods
+{
+    public class Pizza
+    {
 
         /// <summary>
         /// Lembre-se:
@@ -20,48 +23,68 @@ namespace XulambsFoods {
         #endregion
 
         #region construtores
-        public Pizza() {
+        private void Init(int adicionais)
+        {
             _descricao = "Pizza";
             _maxIngredientes = 8;
             _precoBase = 29d;
-            _quantIngredientes = 0;
+            AdicionarIngredientes(adicionais);
             _valorPorAdicional = 5d;
         }
+        public Pizza()
+        {
+            Init(0);
+        }
 
-        public Pizza(int adicionais) {
-        
+        public Pizza(int adicionais)
+        {
+            Init(adicionais);
         }
         #endregion
 
         #region métodos privados
-        private double ValorAdicionais() {
-                
+        private double ValorAdicionais()
+        {
+            return _quantIngredientes * _valorPorAdicional;
         }
 
-        private void ModificarDescricao() {
+        private void ModificarDescricao()
+        {
             _descricao = $"Pizza com {_quantIngredientes} adicionais";
         }
 
-        private bool PodeAdicionar(int quantos) {
-                
+        private bool PodeAdicionar(int quantos)
+        {
+            return (quantos >= 0 && quantos + _quantIngredientes <= _maxIngredientes);
         }
         #endregion
 
         #region métodos públicos
-        public double CalcularValorFinal() {
+        public double CalcularValorFinal()
+        {
             return _precoBase + ValorAdicionais();
         }
 
-        public int AdicionarIngredientes(int quantos) {
-            if (PodeAdicionar(quantos)) {
+        public int AdicionarIngredientes(int quantos)
+        {
+            if (PodeAdicionar(quantos))
+            {
                 _quantIngredientes = _quantIngredientes + quantos;
                 ModificarDescricao();
             }
             return _quantIngredientes;
         }
 
-        public string GerarCupom() {
-                
+        public string GerarCupom()
+        {
+            StringBuilder nota = new StringBuilder("Xulambs Pizza!!!\n");
+            nota.AppendLine("##########################");
+            nota.AppendLine($"{_descricao}");
+            nota.AppendLine($"Preço inicial: {_precoBase:C2}");
+            nota.AppendLine($"Adicionais: {ValorAdicionais:C2}");
+            nota.AppendLine($"Valor total: {CalcularValorFinal():C}");
+            nota.AppendLine("##########################");
+            return nota.ToString();
         }
         #endregion
 
